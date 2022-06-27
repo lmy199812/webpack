@@ -43,24 +43,37 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|jpeg)$/i,
-        use: [
-          {
-            loader: 'url-loader', // 匹配文件, 尝试转base64字符串打包到js中
-            // 配置limit, 超过8k, 不转, file-loader复制, 随机名, 输出文件
-            options: {
-              limit: 8 * 1024,
-            },
+        // use: [
+        //   {
+        //     loader: 'url-loader', // 匹配文件, 尝试转base64字符串打包到js中
+        //     // 配置limit, 超过8k, 不转, file-loader复制, 随机名, 输出文件
+        //     options: {
+        //       limit: 8 * 1024,
+        //     },
+        //   },
+        // ],
+        type: 'asset',
+        parser: {
+          //解析器 规则
+          dataUrlCondition: {
+            //dataUrl的情况
+            maxSize: 8 * 1024, //最大限制值
           },
-        ],
-      },
-      {
-        // webpack5默认内部不认识这些文件, 所以当做静态资源直接输出即可
-        test: /\.(eot|svg|ttf|woff|woff2)$/,
-        type: 'asset/resource',
+        },
         generator: {
-          filename: 'font-[name].[hash:6][ext]',
+          //生成器
+          filename: '[hash:6][ext]', //资源文件处理后 输出文件名
+          //ext 文件扩展名
         },
       },
+      //   {
+      //     // webpack5默认内部不认识这些文件, 所以当做静态资源直接输出即可
+      //     test: /\.(eot|svg|ttf|woff|woff2)$/,
+      //     type: 'asset/resource',
+      //     generator: {
+      //       filename: 'font-[name].[hash:6][ext]',
+      //     },
+      //   },
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
